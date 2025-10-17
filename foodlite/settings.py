@@ -68,7 +68,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://foodlite-fi29q.ondigitalocean.app",
 ]
 CORS_ALLOWED_ORIGINS = [
-    "https://foodlite-fi29q.ondigitalocean.app/",
+    "https://foodlite-fi29q.ondigitalocean.app",
 ]
 
 
