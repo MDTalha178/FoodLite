@@ -147,9 +147,10 @@
   <!-- WebSocket Logic -->
   <script>
     const bookingId = "{{ booking.id }}";
+    const ws_scheme = window.location.protocol === "https:" ? "wss" : "ws";
     const chatSocket = new WebSocket(
-      'ws://' + window.location.host + '/ws/chat/' + bookingId + '/'
-    );
+    ws_scheme + '://' + window.location.host + '/ws/chat/' + bookingId + '/'
+  );
 
     const chatBody = document.getElementById("chat-body");
     const input = document.getElementById("message-input");
