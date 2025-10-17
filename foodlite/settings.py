@@ -96,13 +96,21 @@ TEMPLATES = [
 ASGI_APPLICATION = 'foodlite.asgi.application'
 
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [("127.0.0.1", 6379)],
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [{
+                "address": (
+                    os.environ.get('REDIS_HOST'),
+                    int(os.environ.get('REDIS_PORT', 6379))
+                ),
+                "username": os.environ.get('REDIS_USERNAME', 'default'),
+                "password": os.environ.get("REDIS_PASSWORD"),
+            }],
         },
     },
 }
+
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
