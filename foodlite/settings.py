@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-872yapq7(-q@g!020bs+wt5d(lnpq*8vg%s6nr=94grhmio!#r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*", 'foodlite-fi29q.ondigitalocean.app']
 
 
 # Application definition
@@ -63,6 +63,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://foodlite-fi29q.ondigitalocean.app",
+]
 CORS_ALLOWED_ORIGINS = [
     "https://foodlite-fi29q.ondigitalocean.app/",
 ]
