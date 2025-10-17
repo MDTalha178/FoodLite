@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat | Booking #{{ booking.id }}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .chat-container {
+      max-width: 800px;
+      margin: 30px auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      height: 80vh;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background-color: #007bff;
+      color: white;
+      padding: 15px 20px;
+      font-size: 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-body {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-message {
+      margin-bottom: 12px;
+      display: flex;
+    }
+
+    .chat-message.sent {
+      justify-content: flex-end;
+    }
+
+    .chat-bubble {
+      padding: 10px 14px;
+      border-radius: 16px;
+      max-width: 65%;
+      word-wrap: break-word;
+    }
+
+    .chat-message.sent .chat-bubble {
+      background-color: #007bff;
+      color: white;
+      border-bottom-right-radius: 0;
+    }
+
+    .chat-message.received .chat-bubble {
+      background-color: #e9ecef;
+      color: #212529;
+      border-bottom-left-radius: 0;
+    }
+
+    .chat-footer {
+      padding: 10px 15px;
+      background-color: #f1f3f5;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .chat-footer input {
+      flex: 1;
+      border-radius: 20px;
+      padding: 10px 15px;
+      border: 1px solid #ced4da;
+      outline: none;
+    }
+
+    .chat-footer button {
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chat-timestamp {
+      font-size: 0.75rem;
+      color: #888;
+      margin-top: 2px;
+      text-align: right;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="chat-container">
+    <div class="chat-header">
+      <div>
+        <strong>Chat - Booking #{{ booking.id }}</strong><br>
+        <small>Between {{ booking.customer.username }} & {{ booking.delivery_partner.user.username }}</small>
+      </div>
+      <a href="{% url 'partner_dashboard' %}" class="btn btn-light btn-sm">Back</a>
+    </div>
+
+    <div id="chat-body" class="chat-body">
+      {% for msg in messages %}
+        <div class="chat-message {% if msg.sender == request.user %}sent{% else %}received{% endif %}">
+          <div class="chat-bubble">
+            {{ msg.text }}
+            <div class="chat-timestamp">{{ msg.timestamp|date:"H:i" }}</div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="text-center text-muted mt-3">No messages yet</div>
+      {% endfor %}
+    </div>
+
+  {% if booking.status != "delivered" %}
+  <div class="chat-footer">
+    <input type="text" id="message-input" placeholder="Type your message..." autocomplete="off">
+    <button id="send-btn" class="btn btn-primary">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 16 16">
+        <path d="M15.854.146a.5.5 0 0 1 .146.354v15a.5.5 0 0 1-.854.354l-15-7.5a.5.5 0 0 1 0-.708l15-7.5A.5.5 0 0 1 15.854.146ZM14.5 1.207 2.082 8 14.5 14.793V8a.5.5 0 0 1 1 0v6a.5.5 0 0 1-.854.354L.5 8l14.146-6.354A.5.5 0 0 1 14.5 1.207Z"/>
+      </svg>
+    </button>
+  </div>
+{% else %}
+  <div class="chat-closed-message text-center py-3 border-top bg-light">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#6c757d" class="mb-2" viewBox="0 0 16 16">
+      <path d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm3.707-8.707L7.5 10.5 4.793 7.793a1 1 0 1 1 1.414-1.414L7.5 8.586l2.793-2.793a1 1 0 0 1 1.414 1.414z"/>
+    </svg>
+    <h6 class="mb-0 text-secondary">Booking Completed</h6>
+    <small class="text-muted">Chat is closed. You can no longer send messages.</small>
+  </div>
+{% endif %}
+
+  <!-- WebSocket Logic -->
+  <script>
+    const bookingId = "{{ booking.id }}";
+    const chatSocket = new WebSocket(
+      'ws://' + window.location.host + '/ws/chat/' + bookingId + '/'
+    );
+
+    const chatBody = document.getElementById("chat-body");
+    const input = document.getElementById("message-input");
+    const sendBtn = document.getElementById("send-btn");
+
+
+    function scrollToBottom() {
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+
+    chatSocket.onmessage = function(e) {
+      const data = JSON.parse(e.data);
+      const messageDiv = document.createElement("div");
+      const isCurrentUser = data.sender === "{{ request.user.username }}";
+
+      messageDiv.classList.add("chat-message", isCurrentUser ? "sent" : "received");
+      messageDiv.innerHTML = `
+        <div class="chat-bubble">
+          ${data.message}
+          <div class="chat-timestamp">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+        </div>
+      `;
+      chatBody.appendChild(messageDiv);
+      scrollToBottom();
+    };
+
+
+    sendBtn.onclick = sendMessage;
+    input.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") sendMessage();
+    });
+
+    function sendMessage() {
+      const message = input.value.trim();
+      if (message) {
+        chatSocket.send(JSON.stringify({ 'message': message }));
+        input.value = '';
+      }
+    }
+
+    scrollToBottom();
+  </script>
+</body>
+</html>
