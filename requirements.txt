@@ -7,3 +7,4 @@ django-filter==22.1
 psycopg2-binary==2.9.9
 channels==3.0.4
 python-dotenv~=1.0.1
+channels-redis
