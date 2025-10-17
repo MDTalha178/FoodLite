@@ -95,18 +95,13 @@ TEMPLATES = [
 # WSGI_APPLICATION = 'foodlite.wsgi.application'
 ASGI_APPLICATION = 'foodlite.asgi.application'
 
+REDIS_URL = f"redis://{os.environ.get('REDIS_USERNAME')}:{os.environ.get('REDIS_PASSWORD')}@{os.environ.get('REDIS_HOST')}:{os.environ.get('REDIS_PORT', 6379)}"
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [{
-                "address": (
-                    os.environ.get('REDIS_HOST'),
-                    int(os.environ.get('REDIS_PORT', 6379))
-                ),
-                "username": os.environ.get('REDIS_USERNAME', 'default'),
-                "password": os.environ.get("REDIS_PASSWORD"),
-            }],
+            "hosts": [REDIS_URL],
         },
     },
 }
