@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-872yapq7(-q@g!020bs+wt5d(lnpq*8vg%s6nr=94grhmio!#r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -141,6 +141,32 @@ USE_TZ = True
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_METHODS = (
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+)
+
+
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'expires',
+    'pragma',
+    'cache-control'
+)
 
 
 # Static files (CSS, JavaScript, Images)
