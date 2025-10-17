@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Verify OTP</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .card {
+      border-radius: 15px;
+    }
+    .otp-box {
+      letter-spacing: 8px;
+      text-align: center;
+      font-size: 22px;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-5">
+  <div class="card shadow p-4 mx-auto" style="max-width: 400px;">
+    <h4 class="text-center mb-3">Verify OTP</h4>
+    <p class="text-muted text-center">OTP sent to your mobile number</p>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="POST" action="{% url 'verify_otp' %}">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label>Enter OTP</label>
+        <input type="text" name="otp" maxlength="4" class="form-control otp-box" required autofocus>
+      </div>
+      <button type="submit" class="btn btn-success w-100">Verify & Login</button>
+      <p class="text-center mt-3">
+        <a href="{% url 'login' %}">← Change mobile number</a>
+      </p>
+    </form>
+  </div>
+</div>
+
+<!-- ✅ Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
