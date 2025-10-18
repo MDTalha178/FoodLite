@@ -114,8 +114,7 @@ def verify_otp_view(request):
             user.is_verified = True
             user.save()
 
-            if is_login_request:
-                login(request, user)
+            login(request, user)
 
             # If delivery partner, create profile
             if user.role == 'customer':
