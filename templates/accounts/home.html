@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodExpress - Food Delivery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #fff;
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: #FF6B35;
+            color: white;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        nav a, nav button {
+            color: white;
+            margin-left: 20px;
+            text-decoration: none;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        nav button {
+            padding: 8px 15px;
+            background-color: white;
+            color: #FF6B35;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        nav button:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 60px 30px;
+            text-align: center;
+            background-color: #f5f5f5;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            color: #FF6B35;
+        }
+
+        .hero p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #FF6B35;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #E55A28;
+        }
+
+        .btn-secondary {
+            background-color: #004E89;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #003A63;
+        }
+
+        /* Roles Section */
+        .roles {
+            padding: 60px 30px;
+            text-align: center;
+        }
+
+        .roles h2 {
+            font-size: 28px;
+            margin-bottom: 40px;
+            color: #333;
+        }
+
+        .roles-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .role-box {
+            padding: 30px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .role-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .role-box h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #FF6B35;
+        }
+
+        .role-box p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .role-box .btn {
+            width: 100%;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            nav a, nav button {
+                margin-left: 0;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">🚚 FoodExpress</div>
+        <div>
+            <a href="#about">About</a>
+            <button class="btn btn-primary" onclick="goToLogin('customer')">Login</button>
+            <button class="btn btn-secondary" onclick="goToSignup()">Sign Up</button>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Fast Food Delivery</h1>
+        <p>Order your favorite food and get it delivered in 30 minutes</p>
+        <div class="hero-buttons">
+            <button class="btn btn-primary" onclick="goToLogin('customer')">Order Food</button>
+            <button class="btn btn-secondary" onclick="goToLogin('partner')">Become Delivery Partner</button>
+        </div>
+    </section>
+
+    <section class="roles">
+        <h2>Choose Your Role</h2>
+        <div class="roles-container">
+            <div class="role-box">
+                <div class="role-icon">👤</div>
+                <h3>Customer</h3>
+                <p>Browse restaurants, place orders, track delivery in real-time, and chat with delivery partners.</p>
+                <button class="btn btn-primary" onclick="goToLogin('customer')">Login as Customer</button>
+            </div>
+
+            <!-- Delivery Partner -->
+            <div class="role-box">
+                <div class="role-icon">🏍️</div>
+                <h3>Delivery Partner</h3>
+                <p>Accept orders, update status, communicate with customers, and earn money.</p>
+                <button class="btn btn-primary" onclick="goToLogin('partner')">Login as Partner</button>
+            </div>
+
+            <!-- Admin -->
+            <div class="role-box">
+                <div class="role-icon">👨‍💼</div>
+                <h3>Admin</h3>
+                <p>Manage all bookings, assign delivery partners, and monitor system operations.</p>
+                <button class="btn btn-primary" onclick="goToLogin('admin')">Admin Login</button>
+            </div>
+        </div>
+    </section>
+    <footer id="about">
+        <p>&copy; 2025 FoodExpress. Fast, Fresh & Reliable Delivery Service.</p>
+    </footer>
+
+    <script>
+        function goToLogin(role) {
+            console.log('Redirecting to login page for:', role);
+            window.location.href = '/login';
+        }
+
+        function goToSignup() {
+            console.log('Redirecting to signup page');
+            window.location.href = '/register';
+        }
+    </script>
+</body>
+</html>

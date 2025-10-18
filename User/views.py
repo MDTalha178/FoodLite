@@ -12,6 +12,11 @@ from User.models import User, OTPVerification
 STATIC_OTP = '1234'
 
 
+@require_http_methods(["GET"])
+def home_view(request):
+    return render(request, 'accounts/home.html')
+
+
 @require_http_methods(["GET", "POST"])
 def register_view(request):
     """
